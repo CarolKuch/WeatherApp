@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <Windows.h>
+#include <string>
 #include "HttpConnector.h"
 #include "CreateHttpAddress.h"
 #include "JsonReader.h"
@@ -10,6 +11,7 @@ using namespace std;
 
 static wstring GetACity();
 
+int licznik;
 HANDLE color;
 
 int main()
@@ -18,24 +20,37 @@ int main()
 	SetConsoleTextAttribute(color, 10);
 	cout << "=== WEATHER FORECAST ===" << endl << endl;
 	
-	//get a city name
-	wstring city = GetACity();
-	cout << endl;
-	//create an url
-	CreateHttpAddress createHttpAddress(city);
-	string url = createHttpAddress.HttpConcate();
-	//get a web response
-	string answer = HttpConnector::getHttp(url);
-	//string to json-object
-	json j = json::parse(answer);
+	int counter = 0;
 
-	JsonReader jsonReader(j);
+	do
+	{
+		//get a city name
+		wstring city = GetACity();
+		cout << endl;
+		//create an url
+		CreateHttpAddress createHttpAddress(city);
+		string url = createHttpAddress.HttpConcate();
+		//get a web response
+		string answer = HttpConnector::getHttp(url);
+		//string to json-object
+		json j = json::parse(answer);
+		JsonReader jsonReader(j);
+		// get the weather info
+		SetConsoleTextAttribute(color, 2);
+		if (jsonReader.isCorrect() == true)
+		{
+			jsonReader.readValue();
+			counter=4;
+		}
+		else
+		{
+			cout << "City doesn't exist..." << endl << endl;
+			counter++;
+		}
+	} while (counter < 4);
 
-	// get the weather info
-	SetConsoleTextAttribute(color, 2);
-	jsonReader.readValue();
-	
-
+	SetConsoleTextAttribute(color, 15);
+	cout << "Press any key to exit.";
 	_getch();
 	return 0;
 }
@@ -45,6 +60,6 @@ static wstring GetACity()
 	wstring city;
 	SetConsoleTextAttribute(color, 15);
 	cout << "Enter city name: ";
-	wcin >> city;
+	getline(wcin, city);
 	return city;
 }

@@ -16,8 +16,7 @@ string CreateHttpAddress::HttpConcate()
 }
 
 void CreateHttpAddress::RemovePolishMarks()
-{
-	
+{	
 	for (int i = 0; i < _city.length(); i++)
 	{
 		switch (_city[i])
@@ -49,7 +48,6 @@ void CreateHttpAddress::RemovePolishMarks()
 			case 190:
 				_city[i] = 'z';
 				break;
-
 			case 164:
 				_city[i] = 'A';
 				break;

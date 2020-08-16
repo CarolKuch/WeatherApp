@@ -8,9 +8,10 @@ class JsonReader
 {
 public:
 	JsonReader(json j) { _j = j; }
+	bool isCorrect();
 	void readValue();
 private:
 	json _j;
 	JsonReader();
-	bool isCorrect();
+	
 };
